@@ -1,8 +1,12 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { hash } from 'argon2';
-import { argonOption } from 'src/config/argon';
+import { argonOption } from 'src/common/config/argon';
 
 @Injectable()
 export class UserService {
@@ -37,6 +41,7 @@ export class UserService {
   async find() {
     return await this.prismaService.user.findMany({
       select: {
+        id: true,
         email: true,
         username: true,
       },
@@ -44,10 +49,19 @@ export class UserService {
   }
 
   async findByid(id: string) {
-    return await this.prismaService.user.findUnique({
+    const user = await this.prismaService.user.findUnique({
       where: {
         id,
       },
+      select: {
+        id: true,
+        email: true,
+        username: true,
+      },
     });
+
+    if (!user) throw new NotFoundException('user not found');
+
+    return user;
   }
 }
