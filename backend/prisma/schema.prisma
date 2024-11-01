@@ -1,0 +1,74 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum ROLE{
+  ADMIN
+  USER
+}
+
+enum STATUS{
+  BORROWED
+  PROCESS
+}
+
+model User{
+  id String @id @default(uuid())
+  username String @db.VarChar(100) @unique
+  email String @unique
+  password String @db.VarChar(100)  
+  role ROLE @default(USER)
+  token String?
+  createdAt DateTime @default(now())  
+
+  borrows Borrowing[]
+  wishlists Wishlist[]
+
+  @@map("users")
+}
+
+model Book{
+  id String @id @default(uuid())
+  title String @db.VarChar(255)
+  description String @db.Text
+  cover_image String
+  author_name String
+  publisher_name String
+  year_published Int  
+
+  borrows Borrowing[]
+  wishlists Wishlist[]
+
+  @@map("books")
+}
+
+model Borrowing{
+  id String @id @default(uuid())
+  borrow_date DateTime @default(now())
+  due_date DateTime
+  return_date DateTime
+  status STATUS @default(PROCESS)
+
+  user_id String 
+  book_id String
+  user User @relation(fields: [user_id],references: [id])
+  book Book @relation(fields: [book_id], references: [id])
+
+  @@map("Borrowings")
+}
+
+model Wishlist{
+  id String @id @default(uuid())  
+  createdAt DateTime
+
+  user_id String
+  book_id String
+
+  user User @relation(fields: [user_id], references: [id])
+  book Book @relation(fields: [book_id], references: [id])
+}
