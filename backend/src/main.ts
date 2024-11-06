@@ -8,6 +8,6 @@ async function bootstrap() {
   const reflector = app.get(Reflector);
   app.useGlobalInterceptors(new ResponseInterceptor(reflector));
   app.useGlobalPipes(new ValidationPipe());
-  await app.listen(3000);
+  await app.listen(8000);
 }
 bootstrap();

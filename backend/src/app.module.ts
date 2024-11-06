@@ -5,6 +5,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { BookModule } from './modules/book/book.module';
 import { SupabaseModule } from './modules/supabase/supabase.module';
+import { BorrowModule } from './modules/borrow/borrow.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { SupabaseModule } from './modules/supabase/supabase.module';
     AuthModule,
     BookModule,
     SupabaseModule,
+    BorrowModule,
   ],
 })
 export class AppModule {}

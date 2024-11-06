@@ -12,9 +12,11 @@ enum ROLE{
   USER
 }
 
-enum STATUS{
+enum STATUS {
   BORROWED
   PROCESS
+  RETURNED
+  OVERDUE
 }
 
 model User{
@@ -49,9 +51,8 @@ model Book{
 
 model Borrowing{
   id String @id @default(uuid())
-  borrow_date DateTime @default(now())
-  due_date DateTime
-  return_date DateTime
+  borrow_date DateTime
+  due_date DateTime  
   status STATUS @default(PROCESS)
 
   user_id String 
