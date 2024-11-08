@@ -1,8 +1,11 @@
+import { Type } from 'class-transformer';
 import {
   IsNotEmpty,
+  IsNumber,
   IsOptional,
   IsPositive,
   MaxLength,
+  Min,
   MinLength,
 } from 'class-validator';
 
@@ -25,6 +28,9 @@ export class updateBookDto {
   publisher_name: string;
 
   @IsOptional()
-  @IsPositive()
+  @IsNotEmpty()
+  @Type(() => Number)
+  @IsNumber()
+  @Min(1000)
   year_published: number;
 }

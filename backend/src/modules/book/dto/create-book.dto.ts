@@ -2,7 +2,6 @@ import { Type } from 'class-transformer';
 import {
   IsNotEmpty,
   IsNumber,
-  IsPositive,
   MaxLength,
   Min,
   MinLength,
@@ -12,10 +11,6 @@ export class CreateBookDto {
   @IsNotEmpty()
   @MaxLength(255)
   title: string;
-
-  @IsNotEmpty()
-  @MinLength(100)
-  description: string;
 
   @IsNotEmpty()
   author_name: string;

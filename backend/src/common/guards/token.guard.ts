@@ -26,22 +26,25 @@ export class TokenGuard extends AuthGuard('jwt') {
 
     if (!token) return false;
 
-    const tokenReq = this.jwtService.verify(
-      token,
-      this.configService.get('JWT_SECRET'),
-    );
+    try {
+      const tokenReq = this.jwtService.verify(
+        token,
+        this.configService.get('JWT_SECRET'),
+      );
+      const user = await this.prismaService.user.findUnique({
+        where: { id: tokenReq.sub },
+        select: { token: true },
+      });
 
-    if (!tokenReq) return false;
+      const isValidToken = await verify(user.token, token);
 
-    const user = await this.prismaService.user.findUnique({
-      where: { id: tokenReq.sub },
-      select: { token: true },
-    });
+      if (!isValidToken) return false;
 
-    const isValidToken = await verify(user.token, token);
+      if (!tokenReq) return false;
 
-    if (!isValidToken) return false;
-
-    return true;
+      return true;
+    } catch (error) {
+      return false;
+    }
   }
 }

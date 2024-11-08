@@ -36,8 +36,7 @@ model User{
 
 model Book{
   id String @id @default(uuid())
-  title String @db.VarChar(255)
-  description String @db.Text
+  title String @db.VarChar(255)  
   cover_image String
   author_name String
   publisher_name String

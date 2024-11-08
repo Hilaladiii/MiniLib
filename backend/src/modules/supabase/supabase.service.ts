@@ -29,7 +29,20 @@ export class SupabaseService {
         .getPublicUrl(file.originalname);
       return data;
     } catch (error) {
+      console.log(error);
       throw new InternalServerErrorException(error.message);
+    }
+  }
+
+  async delete(filename: string, bucket: string = 'images') {
+    try {
+      const { error } = await this.supabaseClient.storage
+        .from(bucket)
+        .remove([`/images/${filename}`]);
+
+      if (error) throw new InternalServerErrorException();
+    } catch (error) {
+      throw new InternalServerErrorException();
     }
   }
 }

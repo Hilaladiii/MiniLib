@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -9,42 +10,30 @@ import {
   UploadedFile,
   UseGuards,
   UseInterceptors,
-  UsePipes,
-  ValidationPipe,
 } from '@nestjs/common';
 import { TokenGuard } from 'src/common/guards/token.guard';
 import { BookService } from './book.service';
 import { CreateBookDto } from './dto/create-book.dto';
-import { SupabaseService } from '../supabase/supabase.service';
 import { Message } from 'src/common/decorators/message.decorator';
 import { updateBookDto } from './dto/update-book.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('book')
 export class BookController {
-  constructor(
-    private bookService: BookService,
-    private supabaseService: SupabaseService,
-  ) {}
+  constructor(private bookService: BookService) {}
 
   @Post('create')
   @Message('Success create book')
   @UseGuards(TokenGuard)
-  @UsePipes(
-    new ValidationPipe({
-      transform: true,
-    }),
-  )
   @UseInterceptors(FileInterceptor('file'))
   async create(
     @UploadedFile() file: Express.Multer.File,
     @Body() createBookDto: CreateBookDto,
   ) {
-    const cover_uri = await this.supabaseService.upload(file);
-    return await this.bookService.create(cover_uri.publicUrl, {
+    if (!file) throw new BadRequestException('File required');
+    return await this.bookService.create(file, {
       title: createBookDto.title,
       author_name: createBookDto.author_name,
-      description: createBookDto.description,
       publisher_name: createBookDto.publisher_name,
       year_published: createBookDto.year_published,
     });
@@ -67,8 +56,13 @@ export class BookController {
   @Put('update/:id')
   @UseGuards(TokenGuard)
   @Message('Success update book')
-  async update(@Param('id') id: string, updateBookDto: updateBookDto) {
-    return await this.bookService.update(id, updateBookDto);
+  @UseInterceptors(FileInterceptor('file'))
+  async update(
+    @Param('id') id: string,
+    @UploadedFile() file: Express.Multer.File,
+    @Body() updateBookDto: updateBookDto,
+  ) {
+    return await this.bookService.update(id, file, updateBookDto);
   }
 
   @Delete('delete/:id')
