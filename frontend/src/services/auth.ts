@@ -33,3 +33,17 @@ export async function registerService(data: TRegister) {
   const response: IResponseSuccess & IResponseError = await res.json();
   return response;
 }
+
+export async function logout() {
+  const cookie = await cookies();
+  const res = await fetch(`${process.env.BASE_API_URL}/auth/logout`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${cookie.get("token")?.value}`,
+    },
+  });
+
+  const response: IResponseSuccess & IResponseError = await res.json();
+  if (response.statusCode == 200) cookie.delete("token");
+  return response;
+}

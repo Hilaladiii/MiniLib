@@ -2,12 +2,12 @@ import { ButtonHTMLAttributes } from "react";
 import { cn } from "@/utils/cn";
 
 interface IButton extends ButtonHTMLAttributes<HTMLButtonElement> {
-  label: React.ReactNode;
+  children: React.ReactNode;
   variant: "black" | "white";
   className?: string;
 }
 export default function Button({
-  label,
+  children,
   variant,
   className,
   ...props
@@ -26,7 +26,7 @@ export default function Button({
         className
       )}
     >
-      {label}
+      {children}
     </button>
   );
 }

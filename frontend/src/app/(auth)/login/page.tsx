@@ -24,7 +24,8 @@ export default function LoginPage() {
   const onSubmit: SubmitHandler<TLogin> = async (data) => {
     const res = await login(data);
     if (res.statusCode == 200) {
-      toast.success("Login Successfully");
+      router.push("/admin/dashboard");
+      toast.success(res.message);
     } else {
       toast.error(res.message);
     }
@@ -59,12 +60,9 @@ export default function LoginPage() {
           <Link href={"/"} className="block text-xs underline mt-3 text-right">
             Forgot password?
           </Link>
-          <Button
-            label={"Login"}
-            variant="black"
-            disabled={isSubmitting}
-            className="mt-8"
-          />
+          <Button variant="black" disabled={isSubmitting} className="mt-8">
+            Login
+          </Button>
         </form>
         <span className="inline-flex gap-1 items-center mt-5 text-xs text-gray-700 justify-center">
           <p>Dont have an account?</p>

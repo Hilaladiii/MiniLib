@@ -21,13 +21,13 @@ export default function Input<T extends FieldValues>({
   ...props
 }: IInput<T>) {
   return (
-    <div>
+    <div className="w-full flex flex-col">
       <label htmlFor={name}>{label}</label>
       <input
         id={name}
         {...register(name)}
         {...props}
-        className="w-full px-4 py-2 rounded-xl border border-border200 placeholder:text-xs bg-white"
+        className="px-4 py-2 rounded-xl border border-border200 placeholder:text-xs bg-white"
       />
       {errors && (
         <span className="text-xs text-red-500 mt-1">{errors.message}</span>

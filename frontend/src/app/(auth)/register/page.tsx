@@ -66,12 +66,9 @@ export default function LoginPage() {
               disabled={isSubmitting}
             />
           </div>
-          <Button
-            label={"Register"}
-            variant="black"
-            disabled={isSubmitting}
-            className="mt-8"
-          />
+          <Button variant="black" disabled={isSubmitting} className="mt-8">
+            Register
+          </Button>
         </form>
         <span className="inline-flex gap-1 items-center mt-5 text-xs text-gray-700 justify-center">
           <p>Already have an account?</p>
