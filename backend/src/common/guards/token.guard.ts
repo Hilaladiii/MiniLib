@@ -42,6 +42,8 @@ export class TokenGuard extends AuthGuard('jwt') {
 
       if (!tokenReq) return false;
 
+      request.user = tokenReq;
+
       return true;
     } catch (error) {
       return false;

@@ -28,7 +28,8 @@ export class AuthController {
   @Post('logout')
   @UseGuards(TokenGuard)
   @Message('Success logout into your account')
-  async logout(@GetCurrentUserId() id: string) {
-    return await this.authService.logout(id);
+  @HttpCode(HttpStatus.OK)
+  async logout(@GetCurrentUserId() userId: string) {
+    return await this.authService.logout(userId);
   }
 }
