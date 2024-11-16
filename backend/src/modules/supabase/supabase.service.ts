@@ -1,4 +1,8 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 
@@ -10,7 +14,6 @@ export class SupabaseService {
     this.supabaseClient = createClient(
       this.configService.get<string>('SUPABASE_URL'),
       this.configService.get<string>('SUPABASE_KEY'),
-      {},
     );
   }
 
@@ -29,16 +32,22 @@ export class SupabaseService {
         .getPublicUrl(file.originalname);
       return data;
     } catch (error) {
-      console.log(error);
       throw new InternalServerErrorException(error.message);
     }
   }
 
-  async delete(filename: string, bucket: string = 'images') {
+  async delete(fileUrl: string, bucket: string = 'images') {
     try {
+      const pathPattern = /storage\/v1\/object\/public\/(.*)/;
+      const match = fileUrl.match(pathPattern);
+      if (!match) {
+        throw new BadRequestException('Invalid file URL');
+      }
+      const filePath = match[1];
+
       const { error } = await this.supabaseClient.storage
         .from(bucket)
-        .remove([`/images/${filename}`]);
+        .remove([filePath]);
 
       if (error) throw new InternalServerErrorException();
     } catch (error) {

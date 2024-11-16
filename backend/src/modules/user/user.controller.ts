@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Put,
+  UseGuards,
+} from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UserService } from './user.service';
 import { Message } from 'src/common/decorators/message.decorator';
@@ -26,5 +34,19 @@ export class UserController {
   @Message('Success get user by id')
   async findById(@Param('id') id: string) {
     return await this.userService.findByid(id);
+  }
+
+  @Put('block/:id')
+  @Message('Success block user')
+  @UseGuards(TokenGuard)
+  async block(@Param('id') id: string) {
+    return await this.userService.block(id);
+  }
+
+  @Put('unblock/:id')
+  @Message('Success unblock user')
+  @UseGuards(TokenGuard)
+  async unBlock(@Param('id') id: string) {
+    return await this.userService.unBlock(id);
   }
 }

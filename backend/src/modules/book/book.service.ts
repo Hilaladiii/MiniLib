@@ -7,6 +7,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import { CreateBookDto } from './dto/create-book.dto';
 import { updateBookDto } from './dto/update-book.dto';
 import { SupabaseService } from '../supabase/supabase.service';
+import { UpdateBorrowDto } from '../borrow/dto/update-borrow.dto';
 
 @Injectable()
 export class BookService {
@@ -17,13 +18,15 @@ export class BookService {
 
   async create(file: Express.Multer.File, data: CreateBookDto) {
     const cover_uri = await this.supabaseService.upload(file);
-    const { title, author_name, publisher_name, year_published } = data;
+    const { title, author_name, publisher_name, year_published, quantity } =
+      data;
     return await this.prismaService.book.create({
       data: {
         title,
         author_name,
         publisher_name,
         year_published,
+        quantity,
         cover_image: cover_uri.publicUrl,
       },
     });
@@ -59,8 +62,12 @@ export class BookService {
 
     if (!book) throw new BadRequestException('Book not found');
 
-    await this.supabaseService.delete(book.cover_image);
-    const cover_uri = await this.supabaseService.upload(file);
+    let cover_uri = book.cover_image;
+    if (file) {
+      await this.supabaseService.delete(book.cover_image);
+      const { publicUrl } = await this.supabaseService.upload(file);
+      cover_uri = publicUrl;
+    }
 
     return await this.prismaService.book.update({
       where: {
@@ -68,7 +75,7 @@ export class BookService {
       },
       data: {
         ...updateBookDto,
-        cover_image: cover_uri.publicUrl,
+        cover_image: cover_uri,
       },
     });
   }

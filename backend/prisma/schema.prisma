@@ -1,10 +1,10 @@
 generator client {
-  provider = "prisma-client-js"
+  provider = "prisma-client-js"  
 }
 
 datasource db {
   provider = "mysql"
-  url      = env("DATABASE_URL")
+  url      = env("DATABASE_URL")  
 }
 
 enum ROLE{
@@ -27,6 +27,7 @@ model User{
   role ROLE @default(USER)
   token String?
   createdAt DateTime @default(now())  
+  isBlocked Boolean @default(false)
 
   borrows Borrowing[]
   wishlists Wishlist[]
@@ -41,6 +42,7 @@ model Book{
   author_name String
   publisher_name String
   year_published Int  
+  quantity Int @db.UnsignedInt
 
   borrows Borrowing[]
   wishlists Wishlist[]
@@ -51,7 +53,8 @@ model Book{
 model Borrowing{
   id String @id @default(uuid())
   borrow_date DateTime
-  due_date DateTime  
+  due_date DateTime 
+  return_date DateTime 
   status STATUS @default(PROCESS)
 
   user_id String 

@@ -3,7 +3,6 @@ import {
   IsNotEmpty,
   IsNumber,
   IsOptional,
-  IsPositive,
   MaxLength,
   Min,
   MinLength,
@@ -33,4 +32,11 @@ export class updateBookDto {
   @IsNumber()
   @Min(1000)
   year_published: number;
+
+  @IsOptional()
+  @IsNotEmpty()
+  @Type(() => Number)
+  @IsNumber()
+  @Min(0)
+  quantity: number;
 }

@@ -23,4 +23,10 @@ export class CreateBookDto {
   @IsNumber()
   @Min(1000)
   year_published: number;
+
+  @IsNotEmpty()
+  @Type(() => Number)
+  @IsNumber()
+  @Min(0)
+  quantity: number;
 }
