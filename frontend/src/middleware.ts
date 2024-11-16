@@ -16,7 +16,11 @@ export default async function middleware(req: NextRequest) {
     return NextResponse.redirect(url);
   }
   if (decodedToken.role != "ADMIN" && pathname.startsWith("/admin")) {
-    const url = new URL("/", req.url);
+    const url = new URL("/user/dashboard", req.url);
+    return NextResponse.redirect(url);
+  }
+  if (decodedToken.role != "USER" && pathname.startsWith("/user")) {
+    const url = new URL("/admin/dashboard", req.url);
     return NextResponse.redirect(url);
   }
 
@@ -24,5 +28,5 @@ export default async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/admin/:path*"],
+  matcher: ["/admin/:path*", "/user/:path*"],
 };

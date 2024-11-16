@@ -4,8 +4,8 @@ export interface IResponseSuccess {
   data: any;
 }
 
-export interface IResponseError {
+export interface IResponseError extends Error {
   statusCode: number;
-  message: string[] | string;
+  message: string;
   error: string;
 }

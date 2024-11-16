@@ -4,38 +4,31 @@ import Logo from "@/assets/logo.svg";
 import dashboardIcon from "@/assets/dashboard-icon.svg";
 import catalogIcon from "@/assets/catalog-icon.svg";
 import bookIcon from "@/assets/book-icon.svg";
-import usersIcon from "@/assets/users-icon.svg";
 import { Button } from "../ui/button";
 import { logout } from "@/services/auth";
-
 import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
 
 const itemBar = [
   {
     icon: dashboardIcon,
-    href: "/admin/dashboard",
+    href: "/user/dashboard",
     text: "Dashboard",
   },
   {
     icon: catalogIcon,
-    href: "/admin/catalog",
+    href: "/user/catalog",
     text: "Catalog",
   },
   {
     icon: bookIcon,
-    href: "/admin/books",
+    href: "/user/books",
     text: "Books",
   },
-  {
-    icon: usersIcon,
-    href: "/admin/users",
-    text: "Users",
-  },
 ];
-export function AdminSideBar() {
-  const router = useRouter();
+export function UserSideBar() {
   const { toast } = useToast();
+  const router = useRouter();
 
   const handleLogout = async () => {
     const res = await logout();

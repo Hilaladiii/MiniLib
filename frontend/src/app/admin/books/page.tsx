@@ -1,22 +1,31 @@
 "use client";
 
-import Image from "next/image";
 import { getBooksService, deleteBookService } from "@/services/book";
 import { useState, useEffect } from "react";
-import toast from "react-hot-toast";
-import Button from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import ModalAddBook from "./_components/ModalAddBook";
-import AddIcon from "@/assets/add-icon.svg";
-import EditIcon from "@/assets/edit-icon.svg";
-import DeleteIcon from "@/assets/delete-icon.svg";
+import { PlusCircle } from "@untitled-ui/icons-react";
+import { Edit05 } from "@untitled-ui/icons-react";
+import { Trash01 } from "@untitled-ui/icons-react";
 import ModalEditBook from "./_components/ModalEditBook";
+import Image from "next/image";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { useToast } from "@/hooks/use-toast";
 
 export default function AdminBookPage() {
   const [modal, setModal] = useState({
     add: false,
     edit: false,
-    delete: false,
   });
+
+  const { toast } = useToast();
 
   const [books, setBooks] = useState<IBook[]>([]);
   const [selectedBook, setSelectedBook] = useState<IBook>();
@@ -30,16 +39,20 @@ export default function AdminBookPage() {
     fetchData();
   }, []);
 
-  const handleDeleteBook = (id: string) => {
-    const res = deleteBookService(id);
-    toast.promise(res, {
-      success: (res) => {
-        fetchData();
-        return res.message;
-      },
-      error: "Failed to delete book",
-      loading: "Loading",
-    });
+  const handleDeleteBook = async (id: string) => {
+    const res = await deleteBookService(id);
+    if (res.statusCode == 200) {
+      toast({
+        title: "Success",
+        description: res.message,
+      });
+      fetchData();
+    } else {
+      toast({
+        title: "Failed",
+        description: res.message,
+      });
+    }
   };
 
   const handleEditBook = (id: string) => {
@@ -53,61 +66,61 @@ export default function AdminBookPage() {
         <div className="flex justify-between">
           <h1 className="font-semibold text-2xl">Book Management</h1>
           <Button
-            variant="black"
             className="w-fit inline-flex gap-2 items-center px-3 py-2"
             onClick={() => setModal((prev) => ({ ...prev, add: true }))}
           >
-            <AddIcon /> add book
+            <PlusCircle /> add book
           </Button>
         </div>
 
         <div className="mt-8">
-          <table className="w-full table-auto">
-            <thead>
-              <tr className="text-base border-b">
-                <th className="font-medium">Cover</th>
-                <th className="font-medium">Title</th>
-                <th className="font-medium">Author</th>
-                <th className="font-medium">Publisher</th>
-                <th className="font-medium">Year</th>
-                <th className="font-medium">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {books.length >= 0 ? (
-                books.map((book, i) => (
-                  <tr className="text-xs text-center border-b" key={i}>
-                    <td>
-                      <div className="flex item-center justify-center">
-                        <Image
-                          src={book.cover_image}
-                          alt={book.title}
-                          width={60}
-                          height={60}
-                        />
-                      </div>
-                    </td>
-                    <td> {book.title}</td>
-                    <td> {book.author_name}</td>
-                    <td>{book.publisher_name}</td>
-                    <td>{book.year_published}</td>
-                    <td className="w-20 p-7">
-                      <div className="flex items-center justify-center gap-3">
-                        <button onClick={() => handleEditBook(book.id)}>
-                          <EditIcon />
-                        </button>
-                        <button onClick={() => handleDeleteBook(book.id)}>
-                          <DeleteIcon className="text-red-500 " />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))
-              ) : (
-                <>loading</>
-              )}
-            </tbody>
-          </table>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Cover</TableHead>
+                <TableHead>Title</TableHead>
+                <TableHead>Author</TableHead>
+                <TableHead>Publisher</TableHead>
+                <TableHead>Year</TableHead>
+                <TableHead>Qty</TableHead>
+                <TableHead className="flex justify-end">Action</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {books.map((book, i) => (
+                <TableRow key={i}>
+                  <TableCell className="w-52">
+                    <Image
+                      src={book.cover_image}
+                      alt={book.title}
+                      width={100}
+                      height={100}
+                      className="rounded-md"
+                    />
+                  </TableCell>
+                  <TableCell>{book.title}</TableCell>
+                  <TableCell>{book.author_name}</TableCell>
+                  <TableCell>{book.publisher_name}</TableCell>
+                  <TableCell>{book.year_published}</TableCell>
+                  <TableCell>{book.quantity}</TableCell>
+                  <TableCell className="flex justify-end gap-2">
+                    <Button
+                      variant="ghost"
+                      onClick={() => handleEditBook(book.id)}
+                    >
+                      <Edit05 />
+                    </Button>
+                    <Button
+                      variant="destructive"
+                      onClick={() => handleDeleteBook(book.id)}
+                    >
+                      <Trash01 />
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
         </div>
       </div>
       <ModalAddBook

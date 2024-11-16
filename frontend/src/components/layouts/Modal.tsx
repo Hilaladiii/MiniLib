@@ -15,7 +15,7 @@ export default function Modal({
       onClick={onClose}
     >
       <div
-        className="w-full max-w-md flex transform flex-col items-center justify-center rounded-2xl bg-white p-8 transition-transform duration-300"
+        className="w-full mt-10 max-w-md flex transform flex-col items-center justify-center rounded-2xl bg-white p-8 transition-transform duration-300"
         onClick={(e) => e.stopPropagation()}
       >
         {children}

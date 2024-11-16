@@ -19,11 +19,14 @@ export default function BarItem({
       <div
         className={cn(
           "w-full flex items-center py-2 px-16 gap-5",
-          isActive ? "bg-white text-black" : "bg-black text-white"
+          isActive ? "bg-white text-black" : "bg-black text-text_primary"
         )}
       >
         <Icon
-          className={cn("text-lg", isActive ? "text-black" : "text-white")}
+          className={cn(
+            "text-lg",
+            isActive ? "text-black" : "text-text_primary"
+          )}
         />
         <p className="text-sm font-semibold">{text}</p>
       </div>

@@ -1,12 +1,12 @@
 import Modal from "@/components/layouts/Modal";
 import BookIcon from "@/assets/book-icon.svg";
-import Input from "@/components/ui/input";
+import { Input } from "@/components/ui/input";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { BookSchema, TBook } from "../validation";
-import Button from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import { addBookService } from "@/services/book";
-import toast from "react-hot-toast";
+import { useToast } from "@/hooks/use-toast";
 
 export default function ModalAddBook({
   isOpen,
@@ -17,6 +17,7 @@ export default function ModalAddBook({
   onClose: () => void;
   fetchReload: () => Promise<void>;
 }) {
+  const { toast } = useToast();
   const {
     register,
     handleSubmit,
@@ -31,18 +32,24 @@ export default function ModalAddBook({
   const watchFile = watch("file");
   const fileName = watchFile instanceof File ? watchFile.name : undefined;
 
-  const onSubmit: SubmitHandler<TBook> = (data) => {
-    const res = addBookService(data);
-    toast.promise(res, {
-      loading: "loading",
-      error: "Failed add book",
-      success: (res) => {
-        onClose();
-        reset();
-        fetchReload();
-        return res.message;
-      },
-    });
+  const onSubmit: SubmitHandler<TBook> = async (data) => {
+    console.log(data);
+    const res = await addBookService(data);
+    if (res.statusCode == 201) {
+      toast({
+        title: "Success",
+        description: res.message,
+      });
+      onClose();
+      reset();
+      fetchReload();
+    } else {
+      toast({
+        title: "Failed",
+        description: res.message,
+        variant: "destructive",
+      });
+    }
   };
 
   return (
@@ -114,12 +121,17 @@ export default function ModalAddBook({
               placeholder="Year published"
               errors={errors.year_published}
             />
+            <Input
+              register={register}
+              name="quantity"
+              type="number"
+              placeholder="quantity"
+              errors={errors.quantity}
+            />
           </div>
           <div className="flex gap-2 mt-4">
-            <Button variant="white" onClick={onClose}>
-              Cancel
-            </Button>
-            <Button variant="black" type="submit" disabled={isSubmitting}>
+            <Button onClick={onClose}>Cancel</Button>
+            <Button type="submit" disabled={isSubmitting}>
               Add
             </Button>
           </div>

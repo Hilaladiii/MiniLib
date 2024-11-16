@@ -11,6 +11,14 @@ const nextConfig: NextConfig = {
       },
     },
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "msymtmexwcxpepuqliql.supabase.co",
+      },
+    ],
+  },
 };
 
 export default nextConfig;

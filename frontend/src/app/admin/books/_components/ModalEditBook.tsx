@@ -1,14 +1,14 @@
 import Modal from "@/components/layouts/Modal";
 import BookIcon from "@/assets/book-icon.svg";
-import Input from "@/components/ui/input";
+import { Input } from "@/components/ui/input";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { updateBookSchema, TUpdateBook } from "../validation";
-import Button from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import { useEffect } from "react";
 import { urlToFile, FileOrString, isFile } from "@/utils/urlFile";
 import { updateBookService } from "@/services/book";
-import toast from "react-hot-toast";
+import { useToast } from "@/hooks/use-toast";
 
 export default function ModalEdiTUpdateBook({
   isOpen,
@@ -21,6 +21,7 @@ export default function ModalEdiTUpdateBook({
   fetchReload: () => Promise<void>;
   initialData?: IBook;
 }) {
+  const { toast } = useToast();
   const {
     register,
     handleSubmit,
@@ -34,47 +35,28 @@ export default function ModalEdiTUpdateBook({
       publisher_name: initialData?.publisher_name!,
       title: initialData?.title!,
       year_published: initialData?.year_published!,
+      quantity: initialData?.quantity!,
       file: undefined,
     },
   });
 
-  useEffect(() => {
-    const convertUrlToFile = async () => {
-      if (initialData?.cover_image) {
-        try {
-          const fileName =
-            initialData.cover_image.split("/").pop() || "cover-image.jpg";
-          const file = await urlToFile(initialData.cover_image, fileName);
-          console.log(file);
-          setValue("file", file);
-        } catch (error) {
-          console.error("Error converting cover image:", error);
-        }
-      }
-    };
-
-    if (isOpen) {
-      convertUrlToFile();
+  const onSubmit: SubmitHandler<TUpdateBook> = async (data) => {
+    console.log(data);
+    const res = await updateBookService(initialData?.id!, data);
+    if (res.statusCode == 200) {
+      toast({
+        title: "Success",
+        description: res.message,
+      });
+      fetchReload();
+      onClose();
+    } else {
+      toast({
+        title: "Failed",
+        description: res.message,
+        variant: "destructive",
+      });
     }
-  }, [initialData?.cover_image, isOpen, setValue]);
-
-  const watchFile = watch("file");
-  const fileName =
-    watchFile instanceof File
-      ? watchFile.name
-      : initialData?.cover_image?.split("/")?.pop() || "Current cover image";
-
-  const onSubmit: SubmitHandler<TUpdateBook> = (data) => {
-    const res = updateBookService(initialData?.id!, data);
-    toast.promise(res, {
-      loading: "loading",
-      success: (res) => {
-        fetchReload();
-        onClose();
-        return res.message;
-      },
-      error: "Failed update book",
-    });
   };
 
   return (
@@ -89,6 +71,7 @@ export default function ModalEdiTUpdateBook({
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="space-y-3 my-5">
             <Input
+              label="Title"
               register={register}
               name="title"
               placeholder="Title"
@@ -100,23 +83,13 @@ export default function ModalEdiTUpdateBook({
                 className="w-full mt-2 flex h-[100px] cursor-pointer items-center justify-center rounded-xl border border-dashed"
               >
                 <div className="flex flex-col items-center gap-5">
-                  <div className="text-gray-900 text-xs">
-                    {fileName ? fileName : <>Upload Cover</>}
-                  </div>
+                  <div className="text-gray-900 text-xs">Upload Cover</div>
                 </div>
                 <input
                   type="file"
                   className="hidden"
                   id="file"
-                  {...register("file", {
-                    onChange: (e) => {
-                      const files = e.target.files;
-                      if (files && files.length > 0) {
-                        const file = files[0];
-                        setValue("file", file);
-                      }
-                    },
-                  })}
+                  {...register("file")}
                 />
               </label>
               <div className="h-4">
@@ -128,30 +101,39 @@ export default function ModalEdiTUpdateBook({
               </div>
             </div>
             <Input
+              label="Author"
               register={register}
               name="author_name"
               placeholder="Author name"
               errors={errors.author_name}
             />
             <Input
+              label="Publisher"
               register={register}
               name="publisher_name"
               placeholder="Publisher name"
               errors={errors.publisher_name}
             />
             <Input
+              label="Year"
               register={register}
               name="year_published"
               type="number"
               placeholder="Year published"
               errors={errors.year_published}
             />
+            <Input
+              label="Quantity"
+              register={register}
+              name="quantity"
+              type="number"
+              placeholder="Quantity"
+              errors={errors.quantity}
+            />
           </div>
           <div className="flex gap-2 mt-4">
-            <Button variant="white" onClick={onClose}>
-              Cancel
-            </Button>
-            <Button variant="black" type="submit" disabled={isSubmitting}>
+            <Button onClick={onClose}>Cancel</Button>
+            <Button type="submit" disabled={isSubmitting}>
               Update
             </Button>
           </div>

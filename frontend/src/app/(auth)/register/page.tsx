@@ -1,18 +1,19 @@
 "use client";
 
-import Button from "@/components/ui/button";
-import Input from "@/components/ui/input";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import Link from "next/link";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
-import toast from "react-hot-toast";
 import Logo from "@/assets/logo.svg";
 import { registerService } from "@/services/auth";
 import { registerSchema, TRegister } from "./validation";
+import { useToast } from "@/hooks/use-toast";
 
 export default function LoginPage() {
   const router = useRouter();
+  const { toast } = useToast();
   const {
     register,
     handleSubmit,
@@ -24,10 +25,17 @@ export default function LoginPage() {
   const onSubmit: SubmitHandler<TRegister> = async (data) => {
     const res = await registerService(data);
     if (res.statusCode == 201) {
-      toast.success(res.message);
+      toast({
+        title: "Success",
+        description: res.message,
+      });
       router.push("/login");
     } else {
-      toast.error(res.message);
+      toast({
+        title: "Failed",
+        description: res.message,
+        variant: "destructive",
+      });
     }
   };
 
@@ -35,9 +43,11 @@ export default function LoginPage() {
     <div className="w-full h-screen flex justify-center">
       <div className="w-full max-w-sm flex flex-col justify-center mx-auto">
         <div className="inline-flex items-center gap-2 mx-auto mb-6">
-          <Logo className="text-black" />
+          <Logo className="text-primary" />
         </div>
-        <h1 className="text-3xl font-medium">Welcome to MiniLib!</h1>
+        <h1 className="text-3xl font-medium text-primary">
+          Welcome to MiniLib!
+        </h1>
         <p className="text-xs mt-1">
           Please enter your credentials to register
         </p>
@@ -66,11 +76,11 @@ export default function LoginPage() {
               disabled={isSubmitting}
             />
           </div>
-          <Button variant="black" disabled={isSubmitting} className="mt-8">
+          <Button disabled={isSubmitting} className="mt-8 w-full">
             Register
           </Button>
         </form>
-        <span className="inline-flex gap-1 items-center mt-5 text-xs text-gray-700 justify-center">
+        <span className="inline-flex gap-1 items-center mt-5 text-xs text-gray-800 justify-center">
           <p>Already have an account?</p>
           <Link href={"/login"}>Login</Link>
         </span>

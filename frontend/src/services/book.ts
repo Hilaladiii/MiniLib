@@ -12,6 +12,7 @@ export async function addBookService(data: TBook) {
   formData.append("author_name", data.author_name);
   formData.append("publisher_name", data.publisher_name);
   formData.append("year_published", data.year_published.toString());
+  formData.append("quantity", data.quantity.toString());
 
   const res = await fetch(`${process.env.BASE_API_URL}/book/create`, {
     method: "POST",
@@ -21,7 +22,7 @@ export async function addBookService(data: TBook) {
     },
   });
 
-  const response = await res.json();
+  const response: IResponseSuccess & IResponseError = await res.json();
   return response;
 }
 
@@ -32,12 +33,8 @@ export async function getBooksService() {
     headers: {
       Authorization: `Bearer ${cookie.get("token")?.value}`,
     },
+    cache: "reload",
   });
-  if (!res.ok) {
-    const error = await res.json();
-    throw new Error(error.message);
-  }
-
   const response: IResponseSuccess & IResponseError = await res.json();
   return response;
 }
@@ -46,10 +43,13 @@ export async function updateBookService(id: string, data: TUpdateBook) {
   const cookie = await cookies();
   const formData = new FormData();
   formData.append("title", data.title);
-  formData.append("file", data!.file as File);
+  if (data.file) {
+    formData.append("file", data!.file as File);
+  }
   formData.append("author_name", data.author_name);
   formData.append("publisher_name", data.publisher_name);
   formData.append("year_published", data.year_published.toString());
+  formData.append("quantity", data.quantity.toString());
 
   const res = await fetch(`${process.env.BASE_API_URL}/book/update/${id}`, {
     method: "PUT",
@@ -59,7 +59,7 @@ export async function updateBookService(id: string, data: TUpdateBook) {
     },
   });
 
-  const response = await res.json();
+  const response: IResponseSuccess & IResponseError = await res.json();
   return response;
 }
 
@@ -74,6 +74,6 @@ export async function deleteBookService(id: string) {
   if (!res.ok) {
     throw new Error();
   }
-  const response: Promise<IResponseSuccess & IResponseError> = res.json();
+  const response: IResponseSuccess & IResponseError = await res.json();
   return response;
 }
