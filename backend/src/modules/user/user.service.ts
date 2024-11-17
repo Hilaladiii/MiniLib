@@ -44,6 +44,13 @@ export class UserService {
         id: true,
         email: true,
         username: true,
+        isBlocked: true,
+        createdAt: true,
+      },
+      where: {
+        role: {
+          not: 'ADMIN',
+        },
       },
     });
   }
@@ -63,5 +70,53 @@ export class UserService {
     if (!user) throw new NotFoundException('user not found');
 
     return user;
+  }
+
+  async block(id: string) {
+    const user = await this.prismaService.user.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    if (!user) throw new NotFoundException('User not found');
+
+    return await this.prismaService.user.update({
+      where: {
+        id: user.id,
+      },
+      data: {
+        isBlocked: true,
+      },
+      select: {
+        id: true,
+        email: true,
+        username: true,
+      },
+    });
+  }
+
+  async unBlock(id: string) {
+    const user = await this.prismaService.user.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    if (!user) throw new NotFoundException('User not found');
+
+    return await this.prismaService.user.update({
+      where: {
+        id: user.id,
+      },
+      data: {
+        isBlocked: false,
+      },
+      select: {
+        id: true,
+        email: true,
+        username: true,
+      },
+    });
   }
 }
