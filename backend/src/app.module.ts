@@ -6,6 +6,7 @@ import { BorrowModule } from './modules/borrow/borrow.module';
 import { SupabaseModule } from './modules/supabase/supabase.module';
 import { PrismaModule } from './modules/prisma/prisma.module';
 import { ConfigModule } from '@nestjs/config';
+import { CommentModule } from './modules/comment/comment.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { ConfigModule } from '@nestjs/config';
     BorrowModule,
     SupabaseModule,
     PrismaModule,
+    CommentModule,
   ],
 })
 export class AppModule {}
