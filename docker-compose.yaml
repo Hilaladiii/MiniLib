@@ -6,7 +6,7 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=root
     volumes:
-      - minilib-data:/var/lib/mysql
+      - minilibsecure-data:/var/lib/mysql
 
 volumes:
-  minilib-data:
+  minilibsecure-data:

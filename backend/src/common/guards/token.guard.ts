@@ -3,7 +3,6 @@ import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { AuthGuard } from '@nestjs/passport';
 import { verify } from 'argon2';
-import { Request } from 'express';
 import { PrismaService } from 'src/modules/prisma/prisma.service';
 
 @Injectable()
@@ -17,7 +16,7 @@ export class TokenGuard extends AuthGuard('jwt') {
   }
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const request: Request = context.switchToHttp().getRequest();
+    const request = context.switchToHttp().getRequest();
     const token = request.headers.authorization?.replace('Bearer ', '');
 
     if (!token) return false;
