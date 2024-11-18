@@ -4,11 +4,18 @@ import { UserModule } from './modules/user/user.module';
 import { BookModule } from './modules/book/book.module';
 import { BorrowModule } from './modules/borrow/borrow.module';
 import { SupabaseModule } from './modules/supabase/supabase.module';
-import { DatabaseModule } from './modules/database/database.module';
+import { PrismaModule } from './modules/prisma/prisma.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [AuthModule, UserModule, BookModule, BorrowModule, SupabaseModule, DatabaseModule],
-  controllers: [],
-  providers: [],
+  imports: [
+    ConfigModule.forRoot({ isGlobal: true }),
+    AuthModule,
+    UserModule,
+    BookModule,
+    BorrowModule,
+    SupabaseModule,
+    PrismaModule,
+  ],
 })
 export class AppModule {}
