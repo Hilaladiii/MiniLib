@@ -63,7 +63,6 @@ export class BookController {
     @UploadedFile() file: Express.Multer.File,
     @Body() updateBookDto: updateBookDto,
   ) {
-    console.log(file);
     return await this.bookService.update(id, file, updateBookDto);
   }
 
@@ -71,7 +70,6 @@ export class BookController {
   @UseGuards(TokenGuard)
   @Message('Success delete book')
   async delete(@Param('id') id: string) {
-    console.log(id);
     await this.bookService.delete(id);
   }
 }

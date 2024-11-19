@@ -6,7 +6,8 @@ import { ConfigModule } from '@nestjs/config';
 import { BookModule } from './modules/book/book.module';
 import { SupabaseModule } from './modules/supabase/supabase.module';
 import { BorrowModule } from './modules/borrow/borrow.module';
-import { CronModule } from './modules/cron/cron.module';
+import { WinstonlogModule } from './modules/winstonlog/winstonlog.module';
+import { CommentModule } from './modules/comment/comment.module';
 
 @Module({
   imports: [
@@ -17,7 +18,8 @@ import { CronModule } from './modules/cron/cron.module';
     BookModule,
     SupabaseModule,
     BorrowModule,
-    CronModule,
+    WinstonlogModule,
+    CommentModule,
   ],
 })
 export class AppModule {}

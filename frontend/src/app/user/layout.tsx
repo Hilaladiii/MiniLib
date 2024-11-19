@@ -1,14 +1,13 @@
-import { UserSideBar } from "@/components/layouts/UserSideBar";
+import Navbar from "@/components/fragments/Navbar";
 
-export default function AdminLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex w-full">
-      <UserSideBar />
-      <div className="w-full h-screen mt-8 px-5 ml-60">{children}</div>
+    <div>
+      <Navbar />
+      <div className="h-32 w-full dark:bg-dark2" />
+      <div className="mx-auto w-full px-5 md:max-w-[68em] md:px-0">
+        {children}
+      </div>
     </div>
   );
 }

@@ -9,7 +9,7 @@ interface IFetchApp {
 
 export async function FetchApp({ path, option }: IFetchApp) {
   const cookie = await cookies();
-  const res = await fetch(`${process.env.BASE_API_URL}/${path}`, {
+  const res = await fetch(`${process.env.BASE_API_URL_SECURE}/${path}`, {
     headers: {
       Authorization: `Bearer ${cookie.get("token")?.value}`,
     },

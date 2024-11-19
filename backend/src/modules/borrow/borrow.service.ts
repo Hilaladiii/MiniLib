@@ -80,11 +80,11 @@ export class BorrowService {
   }
 
   async find(type?: STATUS) {
-    console.log(type);
     return await this.prismaService.borrowing.findMany({
       select: {
         borrow_date: true,
         due_date: true,
+        return_date: true,
         status: true,
         user: {
           select: {
@@ -127,6 +127,7 @@ export class BorrowService {
         status: true,
         book: {
           select: {
+            id: true,
             title: true,
             cover_image: true,
           },
@@ -149,13 +150,14 @@ export class BorrowService {
       throw new BadRequestException('Book already returned');
 
     const newQuantity = borrow.book.quantity + 1;
-
+    const returnDate = new Date();
     return await this.prismaService.borrowing.update({
       where: {
         id,
       },
       data: {
         status: 'RETURNED',
+        return_date: returnDate,
         book: {
           update: {
             quantity: newQuantity,

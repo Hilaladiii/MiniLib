@@ -10,7 +10,6 @@ export async function urlToFile(
 
     return new File([blob], fileName, { type: fileType });
   } catch (error) {
-    console.log(error);
     throw error;
   }
 }

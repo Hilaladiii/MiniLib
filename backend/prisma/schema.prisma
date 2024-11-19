@@ -25,12 +25,12 @@ model User{
   email String @unique
   password String @db.VarChar(100)  
   role ROLE @default(USER)
-  token String?
+  token String? @db.VarChar(255)
   createdAt DateTime @default(now())  
   isBlocked Boolean @default(false)
 
   borrows Borrowing[]
-  wishlists Wishlist[]
+  comments Comment[]
 
   @@map("users")
 }
@@ -44,8 +44,8 @@ model Book{
   year_published Int  
   quantity Int @db.UnsignedInt
 
-  borrows Borrowing[]
-  wishlists Wishlist[]
+  comments Comment[]
+  borrows Borrowing[]  
 
   @@map("books")
 }
@@ -59,19 +59,26 @@ model Borrowing{
 
   user_id String 
   book_id String
+  comments Comment[]
   user User @relation(fields: [user_id],references: [id])
   book Book @relation(fields: [book_id], references: [id])
 
-  @@map("Borrowings")
+  @@map("borrowings")
 }
 
-model Wishlist{
-  id String @id @default(uuid())  
-  createdAt DateTime
 
+model Comment {
+  id String @id @default(uuid())
+  content String @db.Text
+  createdAt DateTime @default(now())
+  
   user_id String
   book_id String
-
+  borrowing_id String
+  
   user User @relation(fields: [user_id], references: [id])
   book Book @relation(fields: [book_id], references: [id])
+  borrowing Borrowing @relation(fields: [borrowing_id], references: [id])
+  
+  @@map("comments")
 }

@@ -41,7 +41,6 @@ export default function ModalEdiTUpdateBook({
   });
 
   const onSubmit: SubmitHandler<TUpdateBook> = async (data) => {
-    console.log(data);
     const res = await updateBookService(initialData?.id!, data);
     if (res.statusCode == 200) {
       toast({

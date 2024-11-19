@@ -1,7 +1,6 @@
 "use client";
 import BarItem from "../fragments/BarItem";
 import Logo from "@/assets/logo.svg";
-import dashboardIcon from "@/assets/dashboard-icon.svg";
 import catalogIcon from "@/assets/catalog-icon.svg";
 import bookIcon from "@/assets/book-icon.svg";
 import usersIcon from "@/assets/users-icon.svg";
@@ -12,11 +11,6 @@ import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
 
 const itemBar = [
-  {
-    icon: dashboardIcon,
-    href: "/admin/dashboard",
-    text: "Dashboard",
-  },
   {
     icon: catalogIcon,
     href: "/admin/catalog",

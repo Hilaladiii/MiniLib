@@ -2,17 +2,15 @@
 
 import { IResponseError, IResponseSuccess } from "@/types/response.type";
 import { FetchApp } from "@/utils/fetch";
-import { cookies } from "next/headers";
 
 export async function borrowBook(id: string) {
-  const cookie = await cookies();
-  const res = await fetch(`${process.env.BASE_API_URL}/borrow/${id}`, {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${cookie.get("token")?.value}`,
+  const res = await FetchApp({
+    path: `borrow/${id}`,
+    option: {
+      method: "POST",
     },
   });
-  const response: IResponseError & IResponseSuccess = await res.json();
+  const response: IResponseError & IResponseSuccess = res;
   return response;
 }
 
@@ -28,15 +26,14 @@ export async function returnBookService(id: string) {
 }
 
 export async function getBorrowUserService() {
-  const cookie = await cookies();
-  const res = await fetch(`${process.env.BASE_API_URL}/borrow/user`, {
-    method: "GET",
-    headers: {
-      Authorization: `Bearer ${cookie.get("token")?.value}`,
+  const res = await FetchApp({
+    path: "borrow/user",
+    option: {
+      method: "GET",
     },
   });
 
-  const response: IResponseError & IResponseSuccess = await res.json();
+  const response: IResponseError & IResponseSuccess = res;
   return response;
 }
 

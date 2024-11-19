@@ -33,7 +33,6 @@ export default function ModalAddBook({
   const fileName = watchFile instanceof File ? watchFile.name : undefined;
 
   const onSubmit: SubmitHandler<TBook> = async (data) => {
-    console.log(data);
     const res = await addBookService(data);
     if (res.statusCode == 201) {
       toast({

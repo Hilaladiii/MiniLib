@@ -2,18 +2,16 @@
 
 import { IResponseError, IResponseSuccess } from "@/types/response.type";
 import { FetchApp } from "@/utils/fetch";
-import { cookies } from "next/headers";
 
 export async function getUsersService() {
-  const cookie = await cookies();
-  const res = await fetch(`${process.env.BASE_API_URL}/user`, {
-    method: "GET",
-    headers: {
-      Authorization: `Bearer ${cookie.get("token")?.value}`,
+  const res = await FetchApp({
+    path: "user",
+    option: {
+      method: "GET",
     },
   });
 
-  const response: IResponseSuccess & IResponseError = await res.json();
+  const response: IResponseSuccess & IResponseError = res;
   return response;
 }
 

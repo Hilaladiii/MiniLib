@@ -1,4 +1,4 @@
-interface IBook {
+export interface IBook {
   id: string;
   title: string;
   cover_image: string;
@@ -8,10 +8,22 @@ interface IBook {
   quantity: number;
 }
 
-interface ICatalog {
+export interface ICatalogUser {
   id: string;
   borrow_date: string;
   due_date: string;
   status: string;
-  book: Pick<IBook, "cover_image" | "title">;
+  book: Pick<IBook, "title" | "cover_image" | "id">;
+}
+
+export interface ICatalogAdmin {
+  id: string;
+  borrow_date: string;
+  due_date: string;
+  return_date: string;
+  status: string;
+  book: Pick<IBook, "title">;
+  user: {
+    username: string;
+  };
 }
