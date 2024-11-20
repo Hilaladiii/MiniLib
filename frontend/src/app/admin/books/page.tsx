@@ -18,6 +18,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useToast } from "@/hooks/use-toast";
+import { IBook } from "@/types/book.type";
 
 export default function AdminBookPage() {
   const [modal, setModal] = useState({

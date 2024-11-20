@@ -9,9 +9,15 @@ export class WinstonlogService {
 
   constructor() {
     const logDir = '/var/logs/secure-app';
+    const parentDir = path.dirname(logDir);
+
+    if (!fs.existsSync(parentDir)) {
+      fs.mkdirSync(parentDir, { recursive: true, mode: 0o700 });
+    }
     if (!fs.existsSync(logDir)) {
       fs.mkdirSync(logDir, { mode: 0o700 });
     }
+
     this.logger = winston.createLogger({
       level: 'info',
       format: winston.format.combine(
@@ -25,6 +31,7 @@ export class WinstonlogService {
       ],
     });
   }
+
   logRequest(requestData: Record<string, any>) {
     this.logger.info(requestData);
   }

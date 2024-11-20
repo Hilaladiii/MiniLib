@@ -7,6 +7,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { ICatalogAdmin } from "@/types/book.type";
 import { dateTimeConverter } from "@/utils/date-converter";
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
@@ -36,7 +37,7 @@ export default function TableCatalogAdmin({ catalog }: { catalog: any }) {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {catalog.data.map((catalog: any, i: number) => (
+          {catalog.data.map((catalog: ICatalogAdmin, i: number) => (
             <TableRow key={i}>
               <TableCell className="w-52">{catalog.user.username}</TableCell>
               <TableCell>{catalog.book.title}</TableCell>

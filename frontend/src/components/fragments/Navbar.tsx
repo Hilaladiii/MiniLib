@@ -34,7 +34,7 @@ export default function Navbar() {
         href="/"
         className="cursor-pointer flex justify-center items-center gap-2 font-semibold"
       >
-        <Logo /> MINILIB
+        {/* <Logo /> MINILIB */}
       </Link>
       <div className="hidden space-x-10 text-charcoal dark:text-light md:flex">
         <Link

@@ -1,12 +1,56 @@
+version: "3.8"
+
 services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.backend
+    ports:
+      - "8000:8000"
+    env_file:
+      - ./backend/.env
+    depends_on:
+      - mysql
+    volumes:
+      - ./backend:/usr/src/app
+      - ./logs:/var/logs/secure-app
+    entrypoint: >
+      sh -c "                
+        npx prisma db push &&
+        npm run start:prod
+      "
+    networks:
+      - minilibsecure-network
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    volumes:
+      - ./frontend:/usr/src/app
+    command: npm run dev
+    networks:
+      - minilibsecure-network
+
   mysql:
     image: mysql:latest
     ports:
-      - 3306:3306
+      - "3306:3306"
     environment:
-      - MYSQL_ROOT_PASSWORD=root
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: minilibsecure
     volumes:
       - minilibsecure-data:/var/lib/mysql
+    networks:
+      - minilibsecure-network
 
 volumes:
   minilibsecure-data:
+
+networks:
+  minilibsecure-network:
+    driver: bridge

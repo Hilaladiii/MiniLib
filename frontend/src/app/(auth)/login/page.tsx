@@ -42,9 +42,9 @@ export default function LoginPage() {
   return (
     <div className="w-full h-screen flex justify-center">
       <div className="w-full max-w-sm flex flex-col justify-center mx-auto">
-        <div className="inline-flex items-center gap-2 mx-auto mb-6">
+        {/* <div className="inline-flex items-center gap-2 mx-auto mb-6">
           <Logo className="text-primary" />
-        </div>
+        </div> */}
         <h1 className="text-3xl font-medium text-primary">Welcome Back!</h1>
         <p className="text-xs mt-1 text-primary">
           Please enter your credentials to login

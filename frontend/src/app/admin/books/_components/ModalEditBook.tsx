@@ -5,10 +5,9 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { updateBookSchema, TUpdateBook } from "../validation";
 import { Button } from "@/components/ui/button";
-import { useEffect } from "react";
-import { urlToFile, FileOrString, isFile } from "@/utils/urlFile";
 import { updateBookService } from "@/services/book";
 import { useToast } from "@/hooks/use-toast";
+import { IBook } from "@/types/book.type";
 
 export default function ModalEdiTUpdateBook({
   isOpen,

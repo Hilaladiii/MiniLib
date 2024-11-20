@@ -8,6 +8,7 @@ import { borrowBook } from "@/services/borrow";
 import { getCommentByBookId } from "@/services/comment";
 import { IBook } from "@/types/book.type";
 import { IComment } from "@/types/comment.type";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import { use } from "react";
 
@@ -51,9 +52,11 @@ export default function BooksDetail({ params }: { params: Params }) {
     <div className="max-w-lg mx-auto p-6 bg-white rounded-md shadow-lg">
       <h1 className="text-3xl font-semibold mb-4">{book?.title}</h1>
       <div className="mb-4">
-        <img
-          src={book?.cover_image}
-          alt={book?.title}
+        <Image
+          src={book!.cover_image}
+          alt={book!.title}
+          width={200}
+          height={200}
           className="w-full h-72 object-cover rounded-md"
         />
       </div>

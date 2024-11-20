@@ -49,7 +49,7 @@ export function AdminSideBar() {
   return (
     <aside className="fixed w-60 bg-black min-h-screen text-white">
       <div className="flex flex-col items-center mt-8 gap-5">
-        <Logo className="text-white mb-5" />
+        {/* <Logo className="text-white mb-5" /> */}
         {itemBar.map((item, i) => (
           <BarItem Icon={item.icon} text={item.text} href={item.href} key={i} />
         ))}
