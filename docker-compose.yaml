@@ -13,6 +13,8 @@ services:
       - mysql
     volumes:
       - ./backend:/usr/src/app
+    networks:
+      - minilibsecure-network
     entrypoint: >
       sh -c "
         npx prisma db push &&
@@ -31,6 +33,8 @@ services:
       - ./frontend/.env
     volumes:
       - ./frontend:/usr/src/app
+    networks:
+      - minilibsecure-network
     command: npm run dev
 
   mysql:
@@ -43,6 +47,12 @@ services:
       MYSQL_DATABASE: minilibsecure
     volumes:
       - minilibsecure-data:/var/lib/mysql
+    networks:
+      - minilibsecure-network
 
 volumes:
   minilibsecure-data:
+
+networks:
+  minilibsecure-network:
+    driver: bridge
