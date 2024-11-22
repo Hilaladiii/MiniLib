@@ -46,8 +46,14 @@ pipeline{
         // }
 
         stage('Deploy'){
+            withCredentials([file(credentialsId:'backend-env', variable:'ENV_FILE_BE'),file(credentialsId:'frontend-env', variable:'ENV_FILE_FE')]){
             steps{
-                sh "docker-compose up -d"
+                sh """
+                    cp $ENV_FILE_BE backend/ .env
+                    cp $ENV_FILE_FE frontend/ .env
+                    docker-compose up -d
+                """
+            }
             }
         }
     }
