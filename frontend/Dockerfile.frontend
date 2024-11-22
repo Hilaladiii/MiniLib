@@ -8,7 +8,7 @@ RUN npm install --legacy-peer-deps
 
 RUN npm install -g next@latest
 
-RUN npm install --save-exact --save-dev typescript @types/react @types/node
+RUN npm install --save-exact --save-dev typescript @types/react @types/node --legacy-peer-deps
 
 COPY . .
 
