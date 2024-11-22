@@ -2,9 +2,11 @@ pipeline{
     agent any
 
     environment {
-        DOCKER_COMPOSE_FILE = 'docker-compose.yaml'
         FRONTEND_DIR = 'frontend'
         BACKEND_DIR = 'backend'
+        ENV_FRONTEND = credentials('frontend-env')
+        ENV_BACKEND = credentials('backend-env')
+
     }
 
     stages{
