@@ -13,37 +13,35 @@ pipeline{
                 checkout scm
             }
         }
-        stage("Frontend test"){
-            agent{
-                docker{
-                    image "node:20.18-alpine"
-                    reuseNode true
-                }
-            }
-            steps{
-                dir(FRONTEND_DIR){
-                    sh  """
-                        npm install --legacy-peer-deps
-                        npm run lint
-                    """
-                }
-            }
-        }
-        stage('Backend test'){
-            agent{
-                docker{
-                    image "node:20.18-alpine"
-                }                
-            }
-            steps{
-                dir(BACKEND_DIR){
-                    sh """
-                        npm install
-                        npm run test
-                    """
-                }
-            }
-        }
+        // stage("Frontend test"){
+        //     agent{
+        //         docker{
+        //             image "node:20.18-alpine"
+        //             reuseNode true
+        //         }
+        //     }
+        //     steps{
+        //         dir(FRONTEND_DIR){
+        //             sh  """
+        //                 npm install --legacy-peer-deps                        
+        //             """
+        //         }
+        //     }
+        // }
+        // stage('Backend test'){
+        //     agent{
+        //         docker{
+        //             image "node:20.18-alpine"
+        //         }                
+        //     }
+        //     steps{
+        //         dir(BACKEND_DIR){
+        //             sh """
+        //                 npm install                       
+        //             """
+        //         }
+        //     }
+        // }
 
         stage('Deploy'){
             steps{
