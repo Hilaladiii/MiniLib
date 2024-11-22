@@ -25,7 +25,7 @@ export default function LoginPage() {
   const onSubmit: SubmitHandler<TLogin> = async (data) => {
     const res = await login(data);
     if (res.statusCode == 200) {
-      router.push("/user/dashboard");
+      router.push("/user");
       toast({
         title: "Success",
         description: res.message,

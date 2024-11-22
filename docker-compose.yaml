@@ -13,14 +13,11 @@ services:
       - mysql
     volumes:
       - ./backend:/usr/src/app
-      - ./logs:/var/logs/secure-app
     entrypoint: >
       sh -c "
         npx prisma db push &&
         npm run start:prod
       "
-    networks:
-      - minilibsecure-network
 
   frontend:
     build:
