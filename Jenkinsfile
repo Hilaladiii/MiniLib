@@ -55,7 +55,7 @@ pipeline{
                             cp ${ENV_FILE_BE}  backend/.env
                             cp ${ENV_FILE_FE} frontend/.env
                             docker compose down -v
-                            docker compose up -d --build
+                            docker compose up -d --build --force-recreate
 
                             echo "checking container status"
                             docker ps -a
