@@ -53,7 +53,7 @@ pipeline{
                         sh """
                             cp "$ENV_FILE_BE" backend/.env
                             cp "$ENV_FILE_FE" frontend/.env
-                            docker-compose up -d --build --force-recreate
+                            docker-compose up -d
                         """
                     }
                 }
