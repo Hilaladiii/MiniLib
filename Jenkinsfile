@@ -54,7 +54,20 @@ pipeline{
                         sh """
                             cp ${ENV_FILE_BE}  backend/.env
                             cp ${ENV_FILE_FE} frontend/.env
-                            docker compose up -d
+                            docker compose down -v
+                            docker compose up -d --build
+
+                            echo "checking container status"
+                            docker ps -a
+
+                            echo "backend logs"
+                            docker logs devsecops-backend-1
+
+                            echo "frontend logs"
+                            docker logs devsecops-frontend-1
+
+                            echo "database logs"
+                            docker logs db
                         """
                         }
                         catch(Exception e){
