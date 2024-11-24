@@ -14,4 +14,10 @@ WORKDIR /usr/src/app
 
 COPY --from=BUILDER /usr/src/app /usr/src/app/
 
+COPY wait-for-it.sh /usr/src/app/wait-for-it.sh
+
+RUN chmod +x /usr/src/app/wait-for-it.sh
+
 EXPOSE 8000
+
+CMD ["./wait-for-it.sh", "db", "3306"]
