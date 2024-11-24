@@ -51,8 +51,8 @@ pipeline{
                 ]) {
                     script {
                         sh """
-                            cp "$ENV_FILE_BE" backend/.env
-                            cp "$ENV_FILE_FE" frontend/.env
+                            sudo cp "$ENV_FILE_BE" backend/.env
+                            sudo cp "$ENV_FILE_FE" frontend/.env
                             docker-compose up -d
                         """
                     }
