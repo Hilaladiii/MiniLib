@@ -14,8 +14,6 @@ FROM node:20.18-alpine
 
 WORKDIR /usr/src/app
 
-COPY --from=BUILDER /user/src/app /usr/src/app/
+COPY --from=BUILDER /usr/src/app /usr/src/app/
 
 EXPOSE 8000
-
-CMD [ "npm","run",'start:prod' ]
