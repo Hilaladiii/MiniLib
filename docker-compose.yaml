@@ -9,8 +9,6 @@ services:
       - ./backend/.env
     depends_on:
       - mysql
-    volumes:
-      - ./backend:/usr/src/app
     networks:
       - minilibsecure-network
     entrypoint: >
@@ -29,8 +27,6 @@ services:
       - backend
     env_file:
       - ./frontend/.env
-    volumes:
-      - ./frontend:/usr/src/app
     networks:
       - minilibsecure-network
     command: npm run dev
