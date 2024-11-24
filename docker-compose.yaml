@@ -13,10 +13,10 @@ services:
       - minilibsecure-network
     entrypoint: >
       sh -c "
-        npx prisma generate &&        
+        ./wait-for-it.sh db:3306 -- npx prisma generate &&
         npx prisma db push &&
         npm run build &&
-        npm run start:prod      
+        npm run start:prod
       "
 
   frontend:
