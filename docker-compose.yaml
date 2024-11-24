@@ -13,7 +13,7 @@ services:
       - minilibsecure-network
     entrypoint: >
       sh -c "
-        npx prisma generate
+        npx prisma generate        
         npx prisma db push &&
         npm run start:prod
       "
