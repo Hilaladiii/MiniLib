@@ -50,11 +50,17 @@ pipeline{
                     file(credentialsId: 'frontend-env', variable: 'ENV_FILE_FE')
                 ]) {
                     script {
+                        try{
                         sh """
                             cp ${ENV_FILE_BE}  backend/.env
                             cp ${ENV_FILE_FE} frontend/.env
                             docker compose up -d
                         """
+                        }
+                        catch(Exception e){
+                            echo "Deployment failed ${e.message}"                            
+
+                        }
                     }
                 }
             }
