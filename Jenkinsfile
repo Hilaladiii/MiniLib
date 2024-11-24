@@ -69,7 +69,7 @@ pipeline{
             echo "Deployment failed. Check logs for details"
         }        
         always{
-            clearWs()
+            cleanWs()
         }
     }
 }
