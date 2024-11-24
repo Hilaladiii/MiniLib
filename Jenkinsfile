@@ -67,9 +67,6 @@ pipeline{
         }
         failure{
             echo "Deployment failed. Check logs for details"
-        }
-        always{
-            cleanWs()
-        }
+        }        
     }
 }
