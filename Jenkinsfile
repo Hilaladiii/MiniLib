@@ -20,9 +20,9 @@ pipeline{
         stage('Sast Scan'){
             steps{
                 withCredentials([
-                    file(credentialsId: 'sonar_project_key', variable: 'SONAR_PROJECT_KEY'),
-                    file(credentialsId: 'sonar_organization', variable: 'SONAR_ORGANIZATION'),
-                    file(credentialsId: 'sonar_token', variable: 'SONAR_TOKEN')   
+                    string(credentialsId: 'sonar_project_key', variable: 'SONAR_PROJECT_KEY'),
+                    string(credentialsId: 'sonar_organization', variable: 'SONAR_ORGANIZATION'),
+                    string(credentialsId: 'sonar_token', variable: 'SONAR_TOKEN')   
                 ]){
                      sh """mvn clean verify sonar:sonar \
                             -Dsonar.projectkey=${SONAR_PROJECT_KEY} \
