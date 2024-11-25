@@ -1,6 +1,10 @@
 pipeline{
     agent any
 
+    tools{
+        maven "maven_3_6_3"
+    }
+
     environment {
         FRONTEND_DIR = 'frontend'
         BACKEND_DIR = 'backend'        
@@ -11,6 +15,15 @@ pipeline{
         stage('Checkout'){
             steps{
                 checkout scm
+            }
+        }
+        stage('Sast Scan'){
+            withCredentials(
+                file(credentialsId: 'sonar_project_key', variable: 'SONAR_PROJECT_KEY'),
+                file(credentialsId: 'sonar_organization', variable: 'SONAR_ORGANIZATION')
+                file(credentialsId: 'sonar_token', variable: 'SONAR_TOKEN')
+            ){
+                sh """mvn clean verify sonar:sonar -Dsonar.projectkey=${SONAR_PROJECT_KEY} -Dsonar.organization=${SONAR_ORGANIZATION} -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=${SONAR_TOKEN}"""            
             }
         }
         // stage("Frontend test"){
@@ -54,20 +67,7 @@ pipeline{
                         sh """
                             cp ${ENV_FILE_BE}  backend/.env
                             cp ${ENV_FILE_FE} frontend/.env
-                            docker compose down -v
-                            docker compose up -d --build --force-recreate
-
-                            echo "checking container status"
-                            docker ps -a
-
-                            echo "backend logs"
-                            docker logs devsecops-backend-1
-
-                            echo "frontend logs"
-                            docker logs devsecops-frontend-1
-
-                            echo "database logs"
-                            docker logs db
+                            docker compose up -d --build --force-recreate                            
                         """
                         }
                         catch(Exception e){
