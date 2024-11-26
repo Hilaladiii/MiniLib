@@ -17,51 +17,25 @@ pipeline{
                 checkout scm
             }
         }
-        stage('Sast Scan'){
+        stage('Sast Scan frontend'){
             steps{
-                withCredentials([
-                    string(credentialsId: 'sonar_project_key', variable: 'SONAR_PROJECT_KEY'),
-                    string(credentialsId: 'sonar_organization', variable: 'SONAR_ORGANIZATION'),
-                    string(credentialsId: 'sonar_token', variable: 'SONAR_TOKEN')   
-                ]){
-                     sh """mvn clean verify sonar:sonar \
-                            -Dsonar.projectkey=${SONAR_PROJECT_KEY} \
-                            -Dsonar.organization=${SONAR_ORGANIZATION} \
-                            -Dsonar.host.url=https://sonarcloud.io \
-                            -Dsonar.login=${SONAR_TOKEN}
-                        """
+                dir('frontend'){
+                    sh """                    
+                      sonar-scanner
+                    """
                 }
             }
         }
-        // stage("Frontend test"){
-        //     agent{
-        //         docker{
-        //             image "node:20.18-alpine"
-        //             reuseNode true
-        //         }
-        //     }
-        //     steps{
-        //         dir(FRONTEND_DIR){
-        //             sh  """
-        //                 npm install --legacy-peer-deps                        
-        //             """
-        //         }
-        //     }
-        // }
-        // stage('Backend test'){
-        //     agent{
-        //         docker{
-        //             image "node:20.18-alpine"
-        //         }                
-        //     }
-        //     steps{
-        //         dir(BACKEND_DIR){
-        //             sh """
-        //                 npm install                       
-        //             """
-        //         }
-        //     }
-        // }
+        stage('Sast Scan backend'){
+            steps{
+                dir('backend'){
+                    sh """
+                      cd backend
+                      sonar-scanner
+                    """
+                }                
+            }
+        }        
 
         stage('Deploy') {        
             steps {
