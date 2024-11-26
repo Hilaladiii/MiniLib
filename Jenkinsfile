@@ -29,8 +29,7 @@ pipeline{
         stage('Sast Scan backend'){
             steps{
                 dir('backend'){
-                    sh """
-                      cd backend
+                    sh """                      
                       sonar-scanner
                     """
                 }                
