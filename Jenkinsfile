@@ -17,25 +17,26 @@ pipeline{
                 checkout scm
             }
         }
-        stage('Sast Scan frontend'){
-            steps{
-                dir('frontend'){
-                    sh """                    
-                      sonar-scanner
-                    """
+        stage('Sast Scan'){
+            stage('frontend scan'){
+                steps{
+                    dir('frontend'){
+                        sh """                    
+                        sonar-scanner
+                        """
+                    }
                 }
             }
-        }
-        stage('Sast Scan backend'){
-            steps{
-                dir('backend'){
-                    sh """                      
-                      sonar-scanner
-                    """
-                }                
-            }
+            stage('Sast Scan backend'){
+                steps{
+                    dir('backend'){
+                        sh """                      
+                        sonar-scanner
+                        """
+                    }                
+                }
+            }        
         }        
-
         stage('Deploy') {        
             steps {
                 withCredentials([
