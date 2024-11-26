@@ -6,36 +6,38 @@ import { useToast } from "@/hooks/use-toast";
 import { getBookByIdService } from "@/services/book";
 import { borrowBook } from "@/services/borrow";
 import { getCommentByBookId } from "@/services/comment";
-import { IBook } from "@/types/book.type";
 import { IComment } from "@/types/comment.type";
-import Image from "next/image";
 import { useEffect, useState } from "react";
 import { use } from "react";
 
 type Params = Promise<{ id: string }>;
+
 export default function BooksDetail({ params }: { params: Params }) {
   const { id } = use(params);
 
   const [book, setBook] = useState<IBook>();
   const [comments, setComments] = useState<IComment[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    const fetchbook = async () => {
+    const fetchBook = async () => {
       const book = await getBookByIdService(id);
-      if (book.statusCode == 200) {
+      if (book.statusCode === 200) {
         setBook(book.data);
       }
       const comment = await getCommentByBookId(id);
-      if (comment.statusCode == 200) {
+      if (comment.statusCode === 200) {
         setComments(comment.data);
       }
+      setLoading(false);
     };
-    fetchbook();
+    fetchBook();
   }, [id]);
+
   const { toast } = useToast();
   const handleBorrowBook = async (id: string) => {
     const res = await borrowBook(id);
-    if (res.statusCode == 201) {
+    if (res.statusCode === 201) {
       toast({
         title: "Success",
         description: res.message,
@@ -48,15 +50,37 @@ export default function BooksDetail({ params }: { params: Params }) {
       });
     }
   };
+
+  if (loading) {
+    return (
+      <div className="max-w-lg mx-auto p-6 bg-white rounded-md shadow-lg">
+        <div className="h-8 bg-gray-200 rounded-md mb-4 animate-pulse"></div>
+        <div className="w-full h-72 bg-gray-200 rounded-md mb-4 animate-pulse"></div>
+        <div className="space-y-2 mb-4">
+          <div className="h-4 bg-gray-200 rounded-md w-3/4 animate-pulse"></div>
+          <div className="h-4 bg-gray-200 rounded-md w-2/4 animate-pulse"></div>
+          <div className="h-4 bg-gray-200 rounded-md w-1/4 animate-pulse"></div>
+        </div>
+        <div className="h-10 bg-gray-200 rounded-md animate-pulse"></div>
+        <div className="mt-6">
+          <div className="h-6 bg-gray-200 rounded-md w-1/3 mb-4 animate-pulse"></div>
+          <div className="space-y-2">
+            <div className="h-4 bg-gray-200 rounded-md animate-pulse"></div>
+            <div className="h-4 bg-gray-200 rounded-md animate-pulse"></div>
+            <div className="h-4 bg-gray-200 rounded-md animate-pulse"></div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="max-w-lg mx-auto p-6 bg-white rounded-md shadow-lg">
       <h1 className="text-3xl font-semibold mb-4">{book?.title}</h1>
       <div className="mb-4">
-        <Image
-          src={book!.cover_image}
-          alt={book!.title}
-          width={200}
-          height={200}
+        <img
+          src={book?.cover_image}
+          alt={book?.title}
           className="w-full h-72 object-cover rounded-md"
         />
       </div>
