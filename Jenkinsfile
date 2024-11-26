@@ -1,15 +1,5 @@
 pipeline{
-    agent any
-
-    tools{
-        maven "maven_3_6_2"
-    }
-
-    environment {
-        FRONTEND_DIR = 'frontend'
-        BACKEND_DIR = 'backend'        
-
-    }
+    agent any  
 
     stages{
         stage('Checkout'){
