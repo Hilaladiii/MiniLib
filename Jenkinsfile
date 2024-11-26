@@ -17,7 +17,7 @@ pipeline{
                 checkout scm
             }
         }
-        stage('Sast Scan'){
+        stages('Sast Scan'){
             stage('frontend scan'){
                 steps{
                     dir('frontend'){
