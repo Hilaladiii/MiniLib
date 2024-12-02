@@ -45,7 +45,7 @@ pipeline{
                         sh """
                             cp ${ENV_FILE_BE}  backend/.env
                             cp ${ENV_FILE_FE} frontend/.env
-                            docker compose up 
+                            docker-compose up -d --build --force-recreate
                         """
                         }
                         catch(Exception e){
