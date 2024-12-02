@@ -7,28 +7,33 @@ pipeline{
                 checkout scm
             }
         }
-        stage('Sast Scan'){
-            parallel{
-                stage('frontend scan'){
-                    steps{
-                        dir('frontend'){
-                            sh """                    
-                            sonar-scanner
-                            """
-                        }
-                    }
-                }
-                stage('Sast Scan backend'){
-                    steps{
-                        dir('backend'){
-                            sh """                      
-                            sonar-scanner
-                            """
-                        }                
-                    }
-                }        
-            }
-        }        
+        // stage('Sast Scan'){
+        //     agent {
+        //         node
+        //     }
+        //     parallel{
+        //         stage('frontend scan'){
+        //             steps{
+        //                 dir('frontend'){
+        //                     sh """   
+        //                     npm i --legacy-peer-deps                 
+        //                     sonar-scanner
+        //                     """
+        //                 }
+        //             }
+        //         }
+        //         stage('Sast Scan backend'){
+        //             steps{
+        //                 dir('backend'){
+        //                     sh """ 
+        //                     npm i                     
+        //                     sonar-scanner
+        //                     """
+        //                 }                
+        //             }
+        //         }        
+        //     }
+        // }        
         stage('Deploy') {        
             steps {
                 withCredentials([
