@@ -6,6 +6,7 @@ import { useToast } from "@/hooks/use-toast";
 import { getBookByIdService } from "@/services/book";
 import { borrowBook } from "@/services/borrow";
 import { getCommentByBookId } from "@/services/comment";
+import { IBook } from "@/types/book.type";
 import { IComment } from "@/types/comment.type";
 import { useEffect, useState } from "react";
 import { use } from "react";
