@@ -5,6 +5,7 @@ import { AuthDto } from './dto/auth.dto';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { argonOption } from 'src/common/config/argon';
+import { Throttle } from '@nestjs/throttler';
 
 @Injectable()
 export class AuthService {
@@ -14,6 +15,12 @@ export class AuthService {
     private configService: ConfigService,
   ) {}
 
+  @Throttle({
+    default: {
+      limit: 3,
+      ttl: 60000,
+    },
+  })
   async login(data: AuthDto) {
     const user = await this.prismaService.user.findUnique({
       where: {
